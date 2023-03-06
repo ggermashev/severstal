@@ -40,13 +40,14 @@ function deleteById(id: number, notes: Note[]) {
     return copyNotes
 }
 
-export function Notes() {
+export function Notes(props: { dirDate: number, dirDone: number, dirImp: number, search: string}) {
     const [notes, setNotes] = useState<Note[]>([])
     const [text, setText] = useState<string[]>([])
     let tl = gsap.timeline()
     useEffect(
         () => {
             if (!localStorage.getItem("first")) {
+                const date = new Date()
                 localStorage.setItem("notes", JSON.stringify(
                     [{
                         "id": 0,
@@ -55,7 +56,7 @@ export function Notes() {
                             ' и провисит здесь до момента удаления. ' +
                             'Чтобы редактировать заметку нажмите на карандаш, ' +
                             'чтобы удалить заметку нажмите на крестик.',
-                        "data": (new Date()).toString(),
+                        "date": `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`,
                         "done": false,
                         "important": true,
                     }]))
@@ -65,24 +66,109 @@ export function Notes() {
             setNotes(JSON.parse(localStorage.getItem("notes") || ""))
             setText(new Array(notes.length).fill(""))
         }, [])
+
+    useEffect(
+        () => {
+            let copyNotes = JSON.parse(localStorage.getItem("notes") || "")
+            if (props.dirDate!= 0) {
+                copyNotes = copyNotes
+                    .sort((n1: Note, n2: Note) => {
+                        if (n1.date == n2.date) {
+                            return 0
+                        }
+                        if (props.dirDate == 2) {
+                            if (new Date(n1.date) > new Date(n2.date)) {
+                                return 1
+                            } else {
+                                return -1
+                            }
+                        } else {
+                            if (new Date(n1.date) > new Date(n2.date)) {
+                                return -1
+                            } else {
+                                return 1
+                            }
+                        }
+                    })
+            }
+            if (props.dirDone != 0) {
+                copyNotes = copyNotes.sort((n1: Note, n2: Note) => {
+                    if (n1.done == n2.done) {
+                        return 0
+                    }
+                    if (props.dirDone == 2) {
+                        if (n1.done && !n2.done) {
+                            return 1
+                        }
+                        else {
+                            return -1
+                        }
+                    }
+                    else {
+                        if (!n1.done && n2.done) {
+                            return 1
+                        }
+                        else {
+                            return -1
+                        }
+                    }
+                })
+            }
+            if (props.dirImp != 0) {
+                copyNotes = copyNotes.sort((n1: Note, n2: Note) => {
+                    if (n1.important == n2.important) {
+                        return 0
+                    }
+                    if (props.dirImp == 2) {
+                        if (n1.important && !n1.important) {
+                            return 1
+                        }
+                        else {
+                            return -1
+                        }
+                    }
+                    else {
+                        if (!n1.important && n2.important) {
+                            return 1
+                        }
+                        else {
+                            return -1
+                        }
+                    }
+                })
+            }
+            copyNotes = copyNotes.filter( (n:Note) => {return n.text.toLowerCase().trim().includes(props.search.toLowerCase().trim())})
+            setNotes(copyNotes)
+        }, [props.dirDate, props.dirDone, props.dirImp, props.search])
+
     return (
         <div className="notes-block">
             <ul className="notes">
                 {notes.map((n: Note, i) => {
                     return (
                         <li>
-                            <p className="note-text">{n.text}</p>
                             <div className="note-row">
                                 <p className="note-date">{n.date}</p>
                                 <div className="note-done">
                                     <p>Выполнено</p>
-                                    <FormCheckInput></FormCheckInput>
+                                    <FormCheckInput checked={n.done} onChange={e => {
+                                        let copyNotes = [...notes]
+                                        copyNotes[i].done = e.target.checked
+                                        setNotes(copyNotes)
+                                        setNotesLocal(copyNotes)
+                                    }}></FormCheckInput>
                                 </div>
                                 <div className="note-imp">
                                     <p>Важное</p>
-                                    <FormCheckInput></FormCheckInput>
+                                    <FormCheckInput checked={n.important} onChange={e => {
+                                        let copyNotes = [...notes]
+                                        copyNotes[i].important = e.target.checked
+                                        setNotes(copyNotes)
+                                        setNotesLocal(copyNotes)
+                                    }}></FormCheckInput>
                                 </div>
                             </div>
+                            <p className="note-text">{n.text}</p>
                             <Image onClick={e => {
                                 tl.to(`.id${n.id}`, {
                                     duration: 0.2,
@@ -131,7 +217,7 @@ export function Notes() {
                 copyNotes.push({
                     "id": setId(),
                     "text": "Новая заметка",
-                    "date": `${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`,
+                    "date": `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`,
                     "done": false,
                     "important": false
                 })

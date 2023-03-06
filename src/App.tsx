@@ -10,11 +10,16 @@ import {Filter} from "./Components/Filter";
 
 
 function App() {
+    const [dirDate, setDirDate] = useState(0)
+    const [dirDone, setDirDone] = useState(0)
+    const [dirImp, setDirImp] = useState(0)
+    const [search,setSearch] = useState("")
     return (
         <Fragment>
             <Header/>
-            <Filter/>
-            <Notes/>
+            <Filter dirDate={dirDate} setDirDate={setDirDate} dirDone={dirDone} setDirDone={setDirDone}
+                    dirImp={dirImp} setDirImp={setDirImp} search={search} setSearch={setSearch}/>
+            <Notes dirDate={dirDate} dirImp={dirImp} dirDone={dirDone} search={search}/>
         </Fragment>
     );
 }
