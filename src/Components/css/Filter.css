@@ -1,0 +1,28 @@
+.filter-block {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: start;
+}
+
+ul.filters {
+    background-color: darkblue;
+    align-self: start;
+    height: 80px;
+    color: white;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+ul.filters li {
+    display: inline-block;
+    margin-left: 20px;
+}
+
+.arrow-img {
+    width: 25px;
+    height:25px;
+    margin-left: 5px;
+}

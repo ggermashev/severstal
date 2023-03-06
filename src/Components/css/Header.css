@@ -1,0 +1,13 @@
+.header-block {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    background-color: darkblue;
+    color: white;
+    height: 100px;
+    align-items: center;
+}
+
+.info-btn {
+    height: 60px;
+}
