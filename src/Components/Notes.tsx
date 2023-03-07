@@ -141,6 +141,7 @@ export function Notes(props: { dirDate: number, dirDone: number, dirImp: number,
             setNotes(copyNotes)
         }, [props.dirDate, props.dirDone, props.dirImp, props.search])
 
+
     return (
         <div className="notes-block">
             <ul className="notes">
@@ -148,7 +149,7 @@ export function Notes(props: { dirDate: number, dirDone: number, dirImp: number,
                     return (
                         <li>
                             <div className="note-row">
-                                <p className="note-date">{n.date}</p>
+                                <p className="note-date" onMouseUp={(e) => {console.log("**")}}>{n.date}</p>
                                 <div className="note-done">
                                     <p>Выполнено</p>
                                     <FormCheckInput checked={n.done} onChange={e => {

@@ -7,6 +7,7 @@ import "./Components/css/App.css"
 import {Notes} from "./Components/Notes";
 import {Header} from "./Components/Header";
 import {Filter} from "./Components/Filter";
+import {Footer} from "./Components/Footer";
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
             <Filter dirDate={dirDate} setDirDate={setDirDate} dirDone={dirDone} setDirDone={setDirDone}
                     dirImp={dirImp} setDirImp={setDirImp} search={search} setSearch={setSearch}/>
             <Notes dirDate={dirDate} dirImp={dirImp} dirDone={dirDone} search={search}/>
+            <Footer/>
         </Fragment>
     );
 }
