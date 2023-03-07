@@ -120,7 +120,7 @@ export function Notes(props: { dirDate: number, dirDone: number, dirImp: number,
                         return 0
                     }
                     if (props.dirImp == 2) {
-                        if (n1.important && !n1.important) {
+                        if (n1.important && !n2.important) {
                             return 1
                         }
                         else {
